@@ -48,8 +48,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
              int boardWidth=0;
             getBoardSize(ref boardWidth, ref boardLength);
             Ex02.ConsoleUtils.Screen.Clear();
-            Board theGameBoard = new Board(boardWidth, boardLength);
-
+            Board theGameBoard = new Board(boardLength, boardWidth);
+            theGameBoard.PrintBoard();
         }
 
 
