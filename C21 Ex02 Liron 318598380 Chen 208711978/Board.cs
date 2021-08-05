@@ -5,7 +5,7 @@ using System.Text;
 
 namespace C21_Ex02_Liron_318598380_Chen_208711978
 {
-    class Board
+   public class Board
     {
         private char[,] m_GameBoard;
         private int m_BoardLength;
@@ -70,11 +70,30 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 }
             }
         }
-        public void AddChips(Coordinate i_ChipToAdd,char i_PlayerChip)
+        public void AddChips(int i_ColumnChipToAdd,char i_PlayerChip)
         {
-            m_GameBoard[i_ChipToAdd.CoordinateRow, i_ChipToAdd.CoordinateCol]= i_PlayerChip;
+            for(int i = m_BoardLength - 1; i >= 0; i--)
+            {
+                if(isEmptyPanel(i, i_ColumnChipToAdd))
+                {
+                    m_GameBoard[i, i_ColumnChipToAdd] = i_PlayerChip;
+                }
+            }
+          
         }
 
+        private bool isEmptyPanel(int i_Row,int i_Col)
+        {
+            bool isEmptyPanel = m_GameBoard[i_Row, i_Col] == ' ';
+            return isEmptyPanel;
+        }
+
+        public bool isFullColumn(int i_ColumnChipToAdd)
+        {
+            bool isFullColumn = false;
+            isFullColumn = !(isEmptyPanel(0, i_ColumnChipToAdd));
+            return isFullColumn;
+        }
         public void PrintBoard()
         {
             StringBuilder theGameBoard = new StringBuilder();
