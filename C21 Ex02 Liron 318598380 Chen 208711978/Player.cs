@@ -14,26 +14,29 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         }
 
         // Enum For Which letter is player - given hard codedly 
-        public enum eLetterType
+        /*public enum eLetterType
         {
             X,
             O
-        }
+        }*/
 
         // private members
         private ePlayerType m_PlayerType;
         private int m_ScoreOfPlayer;
-        private eLetterType m_LetterType;
+        private char m_LetterType;
+        private int m_NumberOfPlayer;
 
         // ctor - gets username player type and the players numbers the letter is set automatically
         public Player(int i_PlayerType, int i_NumberOfPlayer)
         {
             m_PlayerType = (ePlayerType)i_PlayerType;
             m_ScoreOfPlayer = 0;
-            m_LetterType = i_NumberOfPlayer == 1 ? eLetterType.X : eLetterType.O;
+            
+            m_LetterType = i_NumberOfPlayer == 1 ? 'X' : 'O';
+            m_NumberOfPlayer = i_NumberOfPlayer;
         }
-
-        public eLetterType PlayerLetterType
+        
+        public char PlayerLetterType
         {
             get
             {
@@ -43,6 +46,18 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             set
             {
                 m_LetterType = value;
+            }
+        }
+        public int NumberOfPlayer
+        {
+            get
+            {
+                return m_NumberOfPlayer;
+            }
+
+            set
+            {
+                m_NumberOfPlayer = value;
             }
         }
 

@@ -14,7 +14,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             m_BoardLength = i_BoardLength;
             m_BoardWidth = i_BoardWidth;
-            m_GameBoard = new char[m_BoardWidth, m_BoardLength];
+            m_GameBoard = new char[m_BoardLength,m_BoardWidth];
             InitBoard(i_BoardLength, i_BoardWidth);
          
         }
@@ -62,24 +62,35 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         private void InitBoard(int i_BoardLength, int i_BoardWidth)
         {
 
-            for(int i = 0; i < i_BoardWidth; i++)
+            for(int i = 0; i < i_BoardLength; i++)
             {
-                for(int j = 0; j < i_BoardLength; j++)
+                for(int j = 0; j < i_BoardWidth; j++)
                 {
                     m_GameBoard[i, j] = ' ';
                 }
             }
         }
-        public void AddChips(int i_ColumnChipToAdd,char i_PlayerChip)
+        public bool AddChips(int i_ColumnChipToAdd,char i_PlayerChip)
         {
-            for(int i = m_BoardLength - 1; i >= 0; i--)
+            bool isFullColumnNumber = isFullColumn(i_ColumnChipToAdd-1);
+            if (!isFullColumnNumber)
             {
-                if(isEmptyPanel(i, i_ColumnChipToAdd))
+                for (int i = m_BoardLength - 1; i >= 0; i--)
                 {
-                    m_GameBoard[i, i_ColumnChipToAdd] = i_PlayerChip;
+                    if (isEmptyPanel(i, i_ColumnChipToAdd - 1))
+                    {
+                        m_GameBoard[i, i_ColumnChipToAdd - 1] = i_PlayerChip;
+                        break;
+                    }
                 }
             }
-          
+            else
+            {
+                Console.WriteLine("The column is full please try again.");
+               
+            }
+            return isFullColumnNumber;
+
         }
 
         private bool isEmptyPanel(int i_Row,int i_Col)
@@ -110,7 +121,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             {
                 for(int j = 0; j < m_BoardWidth; j++)
                 {
-                    theGameBoard.AppendFormat(@"| {0} ", m_GameBoard[j, i]);
+                    theGameBoard.AppendFormat(@"| {0} ", m_GameBoard[i, j]);
                 }
 
                 theGameBoard.Append("|");

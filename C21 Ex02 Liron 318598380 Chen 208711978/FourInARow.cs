@@ -53,19 +53,38 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             bool isGameOver = false;
             int gameRound = 0;
-            int playerNumber = 0;
-            while(!isGameOver)
+            //int playerNumber = 0;
+            Player player = io_Player1;
+            bool isChipNotAddedTocolumn = true;
+            while (!isGameOver)
             {
-                if(gameRound % 2 == 0)
+               
+                Console.WriteLine(string.Format("Player {0} please choose column number:", player.NumberOfPlayer + 1));
+                while (isChipNotAddedTocolumn)
                 {
-                    playerNumber = 1;
+                    isChipNotAddedTocolumn = io_TheGameBoard.AddChips(getPlayerChoice(player.NumberOfPlayer, io_TheGameBoard.BoardWidth), player.PlayerLetterType);
                 }
-                else
-                {
-                    playerNumber = 2;
-                }
+                isChipNotAddedTocolumn = true;
+                    Ex02.ConsoleUtils.Screen.Clear();
+                    io_TheGameBoard.PrintBoard();
+               
 
-                getPlayerChoice(playerNumber, io_TheGameBoard.BoardWidth);
+                gameRound++;
+
+                ChangePlayer(gameRound, ref player, io_Player1, io_Player2);
+            }
+        }
+
+
+        private static void ChangePlayer(int io_gameRound,ref Player io_player, Player io_Player1, Player io_Player2)
+        {
+            if (io_gameRound % 2 == 0)
+            {
+                io_player = io_Player1;
+            }
+            else
+            {
+                io_player = io_Player2;
             }
         }
 
@@ -82,7 +101,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 isVaildPlayerChoice = isPlayerChoiceNumber(playerChoice) && isValidPlayerChoiceColumn(i_BoardWidth, playerChoice,ref PlayerColumnChoice);
                 if(!isVaildPlayerChoice)
                 {
-                    Console.WriteLine(("                        Invalid choice"));
+                    Console.WriteLine("Invalid choice");
                 }
             }
 
@@ -104,11 +123,13 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             return isPlayerChoiceNumber;
         }
 
+      
+
         private static bool isValidPlayerChoiceColumn(int i_BoardWidth, string i_PlayerChoice, ref int io_PlayerColumnChoice)
         {
             bool isValidPlayerChoiceColumn = true;
             io_PlayerColumnChoice = int.Parse(i_PlayerChoice);
-            isValidPlayerChoiceColumn = io_PlayerColumnChoice < i_BoardWidth;
+            isValidPlayerChoiceColumn = io_PlayerColumnChoice <= i_BoardWidth;
 
             return isValidPlayerChoiceColumn;
         }
