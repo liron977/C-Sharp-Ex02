@@ -53,29 +53,92 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             bool isGameOver = false;
             int gameRound = 0;
-            //int playerNumber = 0;
+            int playerColumnChoice=0;
             Player player = io_Player1;
             bool isChipNotAddedTocolumn = true;
-            while (!isGameOver)
+            int currentChipRow=0;
+            bool isContinueToAnotherRound = true;
+            while (isContinueToAnotherRound)
             {
-               
-                Console.WriteLine(string.Format("Player {0} please choose column number:", player.NumberOfPlayer + 1));
-                while (isChipNotAddedTocolumn)
+                isGameOver = false;
+                isContinueToAnotherRound = false;
+                player = io_Player1;
+                gameRound = 0;
+                io_TheGameBoard.InitBoard(io_TheGameBoard.BoardLength, io_TheGameBoard.BoardWidth);
+                Ex02.ConsoleUtils.Screen.Clear();
+                io_TheGameBoard.PrintBoard();
+
+                while (!isGameOver)
                 {
-                    isChipNotAddedTocolumn = io_TheGameBoard.AddChips(getPlayerChoice(player.NumberOfPlayer, io_TheGameBoard.BoardWidth), player.PlayerLetterType);
+
+                    Console.WriteLine(string.Format("Player {0} please choose column number:", player.NumberOfPlayer + 1));
+                    while (isChipNotAddedTocolumn)
+                    {
+                        playerColumnChoice = getPlayerChoice(player.NumberOfPlayer, io_TheGameBoard.BoardWidth);
+                        if (playerColumnChoice == -1)
+                        {
+                            break;
+                        }
+                        isChipNotAddedTocolumn = io_TheGameBoard.AddChips(playerColumnChoice, player.PlayerLetterType, ref currentChipRow);
+                    }
+                    if (playerColumnChoice != -1)
+                    {
+
+                        isChipNotAddedTocolumn = true;
+                        Ex02.ConsoleUtils.Screen.Clear();
+                        io_TheGameBoard.PrintBoard();
+                        if (isPlayerWon(player.PlayerLetterType, currentChipRow, playerColumnChoice, io_TheGameBoard))
+                        {
+                            player.PlayerScore++;
+                            Console.WriteLine(string.Format("Player {0} Won:", player.NumberOfPlayer + 1));
+                            printScore(io_Player1, io_Player2);
+                            isGameOver = true;
+                        }
+                        else if (io_TheGameBoard.isFullBoard())
+                        {
+                            Console.WriteLine("Its a tie");
+                            printScore(io_Player1, io_Player2);
+                            isGameOver = true;
+                        }
+                    }
+                    else
+                    {
+                        ChangePlayer(gameRound, ref player, io_Player1, io_Player2);
+                        player.PlayerScore++;
+                        isGameOver = true;
+                    }
+                    gameRound++;
+
+                    ChangePlayer(gameRound, ref player, io_Player1, io_Player2);
                 }
-                isChipNotAddedTocolumn = true;
-                    Ex02.ConsoleUtils.Screen.Clear();
-                    io_TheGameBoard.PrintBoard();
-               
 
-                gameRound++;
-
-                ChangePlayer(gameRound, ref player, io_Player1, io_Player2);
+                isContinueToAnotherRound = isAnotherRound();
+                
             }
         }
 
+        private static bool isAnotherRound()
+        {
+            int playerChoice;
+            bool isAnotherRound;
+            Console.WriteLine("Would you like to play another game ? If so, press 1 .If not, press 0.");
+            playerChoice=int.Parse(Console.ReadLine());
+            isAnotherRound= playerChoice == 1 ? true : false;
+            return isAnotherRound;
 
+        }
+        private static void printScore(Player io_Player1, Player io_Player2)
+        {
+            Console.WriteLine(string.Format("Player {0} score: {1}", io_Player1.NumberOfPlayer + 1, io_Player1.PlayerScore));
+            Console.WriteLine(string.Format("Player {0} score: {1}", io_Player2.NumberOfPlayer + 1, io_Player2.PlayerScore));
+        }
+        private static bool isPlayerWon(char i_PlayerLetterType, int i_CurrentChipRow,int i_PlayerColumnChoice,Board i_TheGameBoard)
+        {
+            bool isPlayerWon = false;
+            isPlayerWon = i_TheGameBoard.isFourInARow(i_PlayerLetterType, i_CurrentChipRow, i_PlayerColumnChoice - 1) || i_TheGameBoard.isFourInADiagonal(i_PlayerLetterType) || i_TheGameBoard.isFourInACol(i_PlayerLetterType, i_CurrentChipRow, i_PlayerColumnChoice - 1);
+            return isPlayerWon;
+        }
+    
         private static void ChangePlayer(int io_gameRound,ref Player io_player, Player io_Player1, Player io_Player2)
         {
             if (io_gameRound % 2 == 0)
@@ -97,7 +160,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             while(!isVaildPlayerChoice)
             {
                 playerChoice = Console.ReadLine();
-              
+              if(playerChoice=="Q")
+                {
+                    return -1;
+
+                }
                 isVaildPlayerChoice = isPlayerChoiceNumber(playerChoice) && isValidPlayerChoiceColumn(i_BoardWidth, playerChoice,ref PlayerColumnChoice);
                 if(!isVaildPlayerChoice)
                 {
