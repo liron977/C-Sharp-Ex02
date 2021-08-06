@@ -14,11 +14,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         }
 
         // Enum For Which letter is player - given hard codedly 
-        /*public enum eLetterType
+        public enum eLetterType
         {
             X,
             O
-        }*/
+        }
 
         // private members
         private ePlayerType m_PlayerType;

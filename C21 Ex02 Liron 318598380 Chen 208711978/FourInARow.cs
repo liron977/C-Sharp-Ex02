@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace C21_Ex02_Liron_318598380_Chen_208711978
 {
@@ -40,11 +41,13 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             int boardLength = 0;
             int boardWidth = 0;
+            int playerType = 0;
             getBoardSize(ref boardWidth, ref boardLength);
             Ex02.ConsoleUtils.Screen.Clear();
             Board theGameBoard = new Board(boardLength, boardWidth);
+            playerType = getPlayerType();
             Player player1 = new Player(2, 0);
-            Player player2 = new Player(2, 1);
+            Player player2 = new Player(playerType, 1);
             theGameBoard.PrintBoard();
             gameManage(theGameBoard, player1, player2);
         }
@@ -74,7 +77,16 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                     Console.WriteLine(string.Format("Player {0} please choose column number:", player.NumberOfPlayer + 1));
                     while (isChipNotAddedTocolumn)
                     {
-                        playerColumnChoice = getPlayerChoice(player.NumberOfPlayer, io_TheGameBoard.BoardWidth);
+                        if (player.PlayerType==Player.ePlayerType.Person)
+                        {
+                            playerColumnChoice = getPlayerChoice(player.NumberOfPlayer, io_TheGameBoard.BoardWidth);
+                        }
+                        else
+ 
+                        {
+                            Thread.Sleep(500);
+                            playerColumnChoice = getRandomComputerChoice(io_TheGameBoard.BoardWidth);
+                        }
                         if (playerColumnChoice == -1)
                         {
                             break;
@@ -117,6 +129,23 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
         }
 
+        private static int getPlayerType()
+        {
+            bool isValidInput=false;
+            string playerChoice=string.Empty;
+           int  playerTypeChoice=0;
+            while (!isValidInput) 
+            {
+                Console.WriteLine("Please choose if you want to play against computer press(1),if not press(2)");
+                playerChoice = Console.ReadLine();
+                isValidInput = playerChoice == "1" || playerChoice == "2";
+                
+            }
+
+            playerTypeChoice=int.Parse(playerChoice);
+            return playerTypeChoice;
+
+        }
         private static bool isAnotherRound()
         {
             int playerChoice;
@@ -151,6 +180,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
         }
 
+        private static int getRandomComputerChoice(int i_BoardWidth)
+        {
+            int random_number = new Random().Next(1, i_BoardWidth);
+                return random_number;
+        }
         private static int getPlayerChoice(int i_PlayerNumber, int i_BoardWidth)
         {
             //console.writelINE();
