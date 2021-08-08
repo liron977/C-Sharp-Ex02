@@ -9,8 +9,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
     {
         static void Main()
         {
-
-            FourInARow.StartGame();
+            ConsoleGame Game=new ConsoleGame();
+            Game.StartGame();
         }
     }
 }

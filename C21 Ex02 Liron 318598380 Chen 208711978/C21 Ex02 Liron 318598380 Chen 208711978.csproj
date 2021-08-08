@@ -40,6 +40,7 @@
     <Compile Include="FourInARow.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Coordinate.cs" />
+    <Compile Include="ConsoleGame.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
