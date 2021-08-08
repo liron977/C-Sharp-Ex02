@@ -10,19 +10,22 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
     public class FourInARow
     {
       
-        private Player m_Player1;
-        private Player m_Player2;
-        private int m_GameRoundCounter = 0;
-        private Board m_TheGameBoard;
-        private bool m_isGameOver = false;
+        private readonly Player r_Player1;
+        private readonly Player r_Player2;
+        private int m_GameRoundCounter;
+        private readonly Board r_TheGameBoard;
+        private bool m_isGameOver;
         private bool isContinueToAnotherRound;
-        public FourInARow(int i_BoardWidth, int i_BoardLenght , int playerType)
-        {
-            m_TheGameBoard = new Board(i_BoardWidth, i_BoardLenght);
-          
-            m_Player1 = new Player(2, 1);
-            m_Player2 = new Player(playerType, 2);
 
+
+      public FourInARow(int i_BoardWidth, int i_BoardLength , int playerType)
+        {
+            r_TheGameBoard = new Board(i_BoardWidth, i_BoardLength);
+          
+            r_Player1 = new Player(2, 1);
+            r_Player2 = new Player(playerType, 2);
+            m_GameRoundCounter = 0;
+            m_isGameOver = false;
 
         }
 
@@ -30,7 +33,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             get
             {
-                return m_TheGameBoard;
+                return r_TheGameBoard;
             }
         }
         public bool isGameOver
@@ -50,23 +53,19 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             isGameOver = false;
             isContinueToAnotherRound = false;
             m_GameRoundCounter=0;
-            m_TheGameBoard.InitBoard(m_TheGameBoard.BoardLength, m_TheGameBoard.BoardWidth);
+            r_TheGameBoard.InitBoard(r_TheGameBoard.BoardLength, r_TheGameBoard.BoardWidth);
             Ex02.ConsoleUtils.Screen.Clear();
-            m_TheGameBoard.PrintBoard();
+            r_TheGameBoard.PrintBoard();
         }
 
-        public Player InitPlayer()
-        {
-            return m_Player1;
-        }
         public Player GetCurrentPlayer()
         {
-            return m_GameRoundCounter % 2 == 0 ? m_Player1 : m_Player2;
+            return m_GameRoundCounter % 2 == 0 ? r_Player1 : r_Player2;
         }
 
         public Player GetPreviousPlayer()
         {
-            return m_GameRoundCounter % 2 != 0 ? m_Player1 : m_Player2;
+            return m_GameRoundCounter % 2 != 0 ? r_Player1 : r_Player2;
         }
 
         public int m_GameRound
@@ -84,26 +83,26 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
 
        
-        public  bool isPlayerWon( int i_CurrentChipRow,int i_PlayerColumnChoice)
+        public bool IsPlayerWon( int i_CurrentChipRow,int i_PlayerColumnChoice)
         {
             bool isPlayerWon = false;
-            isPlayerWon = m_TheGameBoard.isFourInARow(GetCurrentPlayer().PlayerLetterType, i_CurrentChipRow, i_PlayerColumnChoice - 1) || m_TheGameBoard.isFourInADiagonal(GetCurrentPlayer().PlayerLetterType) || m_TheGameBoard.isFourInACol(GetCurrentPlayer().PlayerLetterType, i_CurrentChipRow, i_PlayerColumnChoice - 1);
+            isPlayerWon = r_TheGameBoard.IsFourInARow(GetCurrentPlayer().PlayerLetterType, i_CurrentChipRow, i_PlayerColumnChoice - 1) || r_TheGameBoard.IsFourInADiagonal(GetCurrentPlayer().PlayerLetterType) || r_TheGameBoard.IsFourInACol(GetCurrentPlayer().PlayerLetterType, i_CurrentChipRow, i_PlayerColumnChoice - 1);
             return isPlayerWon;
         }
     
-        public  int getRandomComputerChoice()
+        public  int GetComputerChoice()
         {
             System.Console.WriteLine(
                 string.Format("The computer turn"));
             Thread.Sleep(500);
-            int random_number = new Random().Next(1, m_TheGameBoard.BoardWidth);
-                return random_number;
+            int computerChoice = r_TheGameBoard.GetFirstAvailableColumn();
+                return computerChoice;
         }
         
-        public  bool isPlayerChoiceIsNumber(string i_PlayerChoice)
+        public bool IsPlayerChoiceIsNumber(string i_PlayerChoice)
         {
             bool isPlayerChoiceNumber = true;
-            for (int i = 0; i < i_PlayerChoice.Length; i++)
+            for(int i = 0; i < i_PlayerChoice.Length; i++)
             {
                 isPlayerChoiceNumber = (char.IsDigit(i_PlayerChoice[i]));
                 if (!isPlayerChoiceNumber)
@@ -115,11 +114,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             return isPlayerChoiceNumber;
         }
 
-        public  bool isPlayerChoiceColumnInRange( string i_PlayerChoice, ref int io_PlayerColumnChoice)
+        public bool IsPlayerChoiceColumnInRange( string i_PlayerChoice, ref int io_PlayerColumnChoice)
         {
             bool isValidPlayerChoiceColumn = true;
             io_PlayerColumnChoice = int.Parse(i_PlayerChoice);
-            isValidPlayerChoiceColumn = io_PlayerColumnChoice <= m_TheGameBoard.BoardWidth;
+            isValidPlayerChoiceColumn = io_PlayerColumnChoice <= r_TheGameBoard.BoardWidth;
 
             return isValidPlayerChoiceColumn;
         }

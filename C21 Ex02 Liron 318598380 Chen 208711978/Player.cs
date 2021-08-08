@@ -13,7 +13,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             Person = 2
         }
 
-        // Enum For Which letter is player - given hard codedly 
+       
         public enum eLetterType
         {
             X,

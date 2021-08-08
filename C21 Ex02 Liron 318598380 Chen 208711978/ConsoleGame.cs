@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+
 
 namespace C21_Ex02_Liron_318598380_Chen_208711978
 {
-    class ConsoleGame
+    public class ConsoleGame
     {
         private readonly int playerDecidedToQuit = -1;
 
@@ -24,7 +26,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             gameManage(newGame);
         }
 
-        public void gameManage(FourInARow newGame)
+        private void gameManage(FourInARow newGame)
         {
             int playerChoice = 0;
             Player player;
@@ -33,7 +35,6 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
             while(isContinueToAnotherRound)
             {
-               
                 newGame.initGame();
                 while(!newGame.isGameOver)
                 {
@@ -50,11 +51,13 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                     }
 
                     newGame.m_GameRound++;
-                    player = newGame.GetCurrentPlayer();
                 }
 
                 isContinueToAnotherRound = isAnotherRound();
             }
+          
+
+
         }
 
         private void playerQuitTheGame(FourInARow i_newGame, Player i_Player)
@@ -68,26 +71,26 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             FourInARow i_newGame,
             Player i_Player,
             ref int io_CurrentChipRow,
-            ref int playerColumnChoice)
+            ref int playerChoice)
         {
-            bool isChipNotAddedTocolumn = true;
-            while(isChipNotAddedTocolumn)
+            bool isChipNotAddedToColumn = true;
+            while(isChipNotAddedToColumn)
             {
                 if(i_Player.PlayerType == Player.ePlayerType.Person)
                 {
-                    playerColumnChoice = getPlayerChoice(i_Player.NumberOfPlayer, i_newGame);
-                    if(playerColumnChoice == -1)
+                    playerChoice = getPlayerChoice( i_newGame);
+                    if(playerChoice == -1)
                     {
                         break;
                     }
                 }
                 else
                 {
-                    playerColumnChoice=i_newGame.getRandomComputerChoice();
+                    playerChoice = i_newGame.GetComputerChoice();
                 }
 
-                isChipNotAddedTocolumn = i_newGame.TheGameBoard.AddChips(
-                    playerColumnChoice,
+                isChipNotAddedToColumn = i_newGame.TheGameBoard.AddChips(
+                    playerChoice,
                     i_Player.PlayerLetterType,
                     ref io_CurrentChipRow);
             }
@@ -97,17 +100,17 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             Ex02.ConsoleUtils.Screen.Clear();
             i_newGame.TheGameBoard.PrintBoard();
-            if(i_newGame.isPlayerWon(currentChipRow, playerColumnChoice))
+            if(i_newGame.IsPlayerWon(currentChipRow, playerColumnChoice))
             {
                 printTheWinner(i_newGame);
             }
-            else if(i_newGame.TheGameBoard.isFullBoard())
+            else if(i_newGame.TheGameBoard.IsFullBoard())
             {
-                declareAtie(i_newGame);
+                declareATie(i_newGame);
             }
         }
 
-        private void declareAtie(FourInARow i_newGame)
+        private void declareATie(FourInARow i_newGame)
         {
             System.Console.WriteLine("Its a tie");
             printScore(i_newGame.GetCurrentPlayer(), i_newGame.GetPreviousPlayer());
@@ -117,7 +120,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         private void printTheWinner(FourInARow i_newGame)
         {
             i_newGame.GetCurrentPlayer().PlayerScore++;
-            System.Console.WriteLine(string.Format("Player {0} Won:", i_newGame.GetCurrentPlayer().NumberOfPlayer));
+            string theWinner = string.Format("Player {0} Won:", i_newGame.GetCurrentPlayer().NumberOfPlayer);
+            System.Console.WriteLine(theWinner);
             printScore(i_newGame.GetCurrentPlayer(), i_newGame.GetPreviousPlayer());
             i_newGame.isGameOver = true;
         }
@@ -169,31 +173,39 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         private bool isAnotherRound()
         {
-            int playerChoice;
-            bool isAnotherRound;
-            System.Console.WriteLine("Would you like to play another game ? If so, press 1 .If not, press 0.");
-            playerChoice = int.Parse(System.Console.ReadLine());
-            isAnotherRound = playerChoice == 1 ? true : false;
+            int playerChoice = -1;
+            bool isAnotherRound=false;
+            bool isValidInput = false;
+
+            while(!isValidInput)
+            {
+                System.Console.WriteLine("Would you like to play another game ? If so, press 1 .If not, press 0.");
+                playerChoice = int.Parse(System.Console.ReadLine());
+                isValidInput = playerChoice == 1 || playerChoice == 0;
+                Ex02.ConsoleUtils.Screen.Clear();
+            }
+
+            isAnotherRound = playerChoice == 1;
             return isAnotherRound;
         }
 
-        private static void printScore(Player io_Player1, Player io_Player2)
+        private  void printScore(Player io_Player1, Player io_Player2)
         {
             System.Console.WriteLine(
-                string.Format("Player {0} score: {1}", io_Player1.NumberOfPlayer + 1, io_Player1.PlayerScore));
+                string.Format("Player {0} score: {1}", io_Player1.NumberOfPlayer, io_Player1.PlayerScore));
             System.Console.WriteLine(
-                string.Format("Player {0} score: {1}", io_Player2.NumberOfPlayer + 1, io_Player2.PlayerScore));
+                string.Format("Player {0} score: {1}", io_Player2.NumberOfPlayer, io_Player2.PlayerScore));
         }
 
-        private int getPlayerChoice(int i_PlayerNumber, FourInARow newGame)
+        private int getPlayerChoice( FourInARow newGame)
         {
-            //console.writelINE();
+            
             string playerChoice;
-            bool isVaildPlayerChoice = false;
+            bool isValidPlayerChoice = false;
             int PlayerColumnChoice = 0;
             System.Console.WriteLine(
                 string.Format("Player {0} please choose column number:", newGame.GetCurrentPlayer().NumberOfPlayer));
-            while(!isVaildPlayerChoice)
+            while(!isValidPlayerChoice)
             {
                 playerChoice = System.Console.ReadLine();
                 if(playerChoice == "Q")
@@ -201,10 +213,9 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                     return -1;
                 }
 
-                isVaildPlayerChoice = newGame.isPlayerChoiceIsNumber(playerChoice) && newGame.isPlayerChoiceColumnInRange(
-                                          playerChoice,
-                                          ref PlayerColumnChoice);
-                if(!isVaildPlayerChoice)
+                isValidPlayerChoice = newGame.IsPlayerChoiceIsNumber(playerChoice)
+                                      && newGame.IsPlayerChoiceColumnInRange(playerChoice, ref PlayerColumnChoice);
+                if(!isValidPlayerChoice)
                 {
                     System.Console.WriteLine("Invalid choice");
                 }
@@ -213,7 +224,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             return PlayerColumnChoice;
         }
 
-        public bool isValidBoardSize(int i_input)
+        private bool isValidBoardSize(int i_input)
         {
             bool isValidInput = true;
             isValidInput = i_input >= 4 && i_input <= 8;

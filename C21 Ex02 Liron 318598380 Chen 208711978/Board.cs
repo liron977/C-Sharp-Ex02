@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace C21_Ex02_Liron_318598380_Chen_208711978
 {
     public class Board
     {
-        private char[,] m_GameBoard;
+        private readonly char[,] r_GameBoard;
         private int m_BoardLength;
         private int m_BoardWidth;
         public Board(int i_BoardLength, int i_BoardWidth)
         {
             m_BoardLength = i_BoardLength;
             m_BoardWidth = i_BoardWidth;
-            m_GameBoard = new char[m_BoardLength, m_BoardWidth];
+            r_GameBoard = new char[m_BoardLength, m_BoardWidth];
             InitBoard(i_BoardLength, i_BoardWidth);
-
         }
 
         public int BoardWidth
@@ -45,18 +42,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
         }
 
-        public Char[,] MatrixOfBoard
-        {
-            get
-            {
-                return m_GameBoard;
-            }
-
-            set
-            {
-                m_GameBoard = value;
-            }
-        }
+       
 
         // Initialize the board when created
        public void InitBoard(int i_BoardLength, int i_BoardWidth)
@@ -66,7 +52,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             {
                 for (int j = 0; j < i_BoardWidth; j++)
                 {
-                    m_GameBoard[i, j] = ' ';
+                    r_GameBoard[i, j] = ' ';
                 }
             }
         }
@@ -79,7 +65,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 {
                     if (isEmptyPanel(i, i_ColumnChipToAdd - 1))
                     {
-                        m_GameBoard[i, i_ColumnChipToAdd - 1] = i_PlayerChip;
+                        r_GameBoard[i, i_ColumnChipToAdd - 1] = i_PlayerChip;
                         io_currentChipRow = i;
                         break;
                     }
@@ -96,14 +82,13 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         private bool isEmptyPanel(int i_Row, int i_Col)
         {
-            bool isEmptyPanel = m_GameBoard[i_Row, i_Col] == ' ';
+            bool isEmptyPanel = r_GameBoard[i_Row, i_Col] == ' ';
             return isEmptyPanel;
         }
 
-        public bool isFullColumn(int i_ColumnChipToAdd)
+        private bool isFullColumn(int i_ColumnChipToAdd)
         {
-            bool isFullColumn = false;
-            isFullColumn = !(isEmptyPanel(0, i_ColumnChipToAdd));
+            bool isFullColumn = !(isEmptyPanel(0, i_ColumnChipToAdd));
             return isFullColumn;
         }
         public void PrintBoard()
@@ -122,7 +107,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             {
                 for (int j = 0; j < m_BoardWidth; j++)
                 {
-                    theGameBoard.AppendFormat(@"| {0} ", m_GameBoard[i, j]);
+                    theGameBoard.AppendFormat(@"| {0} ", r_GameBoard[i, j]);
                 }
 
                 theGameBoard.Append("|");
@@ -139,17 +124,17 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
             Console.WriteLine(theGameBoard);
         }
-        public bool isFourInARow(char i_PlayerChip, int i_ChipRowLocation, int i_ChipColLocation)
+        public bool IsFourInARow(char i_PlayerChip, int i_ChipRowLocation, int i_ChipColLocation)
         {
             int count = 1;
             bool isFourInARow = false;
             for (int i = i_ChipColLocation; i > 0; i--)
             {
-                if ((m_GameBoard[i_ChipRowLocation, i] != m_GameBoard[i_ChipRowLocation, i - 1]) || (count == 4))
+                if ((r_GameBoard[i_ChipRowLocation, i] != r_GameBoard[i_ChipRowLocation, i - 1]) || (count == 4))
                 {
                     break;
                 }
-                if (m_GameBoard[i_ChipRowLocation, i] == i_PlayerChip)
+                if (r_GameBoard[i_ChipRowLocation, i] == i_PlayerChip)
                 {
                     count++;
 
@@ -157,11 +142,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
             for (int i = i_ChipColLocation; i < BoardWidth - 1; i++)
             {
-                if ((m_GameBoard[i_ChipRowLocation, i] != m_GameBoard[i_ChipRowLocation, i + 1]) || (count == 5))
+                if ((r_GameBoard[i_ChipRowLocation, i] != r_GameBoard[i_ChipRowLocation, i + 1]) || (count == 5))
                 {
                     break;
                 }
-                if (m_GameBoard[i_ChipRowLocation, i] == i_PlayerChip)
+                if (r_GameBoard[i_ChipRowLocation, i] == i_PlayerChip)
                 {
                     count++;
 
@@ -178,17 +163,17 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
 
     
-    public bool isFourInACol(char i_PlayerChip, int i_ChipRowLocation, int i_ChipColLocation)
+    public bool IsFourInACol(char i_PlayerChip, int i_ChipRowLocation, int i_ChipColLocation)
     {
         int count = 1;
         bool isFourInACol = false;
         for (int i = i_ChipRowLocation; i > 0; i--)
         {
-            if ((m_GameBoard[i, i_ChipColLocation] != m_GameBoard[i-1, i_ChipColLocation]) || (count == 4))
+            if ((r_GameBoard[i, i_ChipColLocation] != r_GameBoard[i-1, i_ChipColLocation]) || (count == 4))
             {
                 break;
             }
-            if (m_GameBoard[i, i_ChipColLocation] == i_PlayerChip)
+            if (r_GameBoard[i, i_ChipColLocation] == i_PlayerChip)
             {
                 count++;
 
@@ -196,11 +181,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         }
         for (int i = i_ChipRowLocation; i < m_BoardLength- 1; i++)
         {
-            if ((m_GameBoard[i, i_ChipColLocation] != m_GameBoard[i+1, i_ChipColLocation]) || (count == 5))
+            if ((r_GameBoard[i, i_ChipColLocation] != r_GameBoard[i+1, i_ChipColLocation]) || (count == 5))
             {
                 break;
             }
-            if (m_GameBoard[i, i_ChipColLocation] == i_PlayerChip)
+            if (r_GameBoard[i, i_ChipColLocation] == i_PlayerChip)
             {
                 count++;
 
@@ -214,12 +199,12 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
 
     }
-        public bool isFullBoard()
+        public bool IsFullBoard()
         {
             bool isFullBoard = true;
             for (int c = 0; c < m_BoardWidth; c++)
             {
-                if(m_GameBoard[0,c]==' ')
+                if(r_GameBoard[0,c]==' ')
                 {
                     isFullBoard = false;
                     break;
@@ -230,7 +215,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         private bool isFourInADiagonalTopLeftToBottomRightIncludeMiddle(char i_PlayerChip)
         {
-            int match = 0;
+            int match=0;
             bool isFourInADiagonal=false;
             for (int r = 0; r <= m_BoardLength - 4; r++)
             {
@@ -238,7 +223,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 match = 0;
                 for (int column = 0; column < m_BoardWidth && rowPosition < m_BoardLength; column++)
                 {
-                    char currentValue = m_GameBoard[rowPosition, column];
+                    char currentValue = r_GameBoard[rowPosition, column];
                     if (currentValue == i_PlayerChip)
                         match++;
                     else match = 0;
@@ -253,7 +238,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
             return isFourInADiagonal;
         }
-        private bool isFourInADiagonalbBottomLeftToTopRightIncludeMiddle(char i_PlayerChip)
+        private bool isFourInADiagonalBottomLeftToTopRightIncludeMiddle(char i_PlayerChip)
         {
             int match = 0;
             bool isFourInADiagonal = false;
@@ -263,7 +248,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 match = 0;
                 for (int column = 0; column < m_BoardWidth && rowPosition < m_BoardLength && rowPosition >= 0; column++)
                 {
-                    Char currentValue = m_GameBoard[rowPosition, column];
+                    Char currentValue = r_GameBoard[rowPosition, column];
                     if (currentValue == i_PlayerChip)
                         match++;
                     else match = 0;
@@ -278,7 +263,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
             return isFourInADiagonal;
         }
-        private bool isFourInADiagonalbBottomLeftToTopRightAfterMiddle(char i_PlayerChip)
+        private bool isFourInADiagonalBottomLeftToTopRightAfterMiddle(char i_PlayerChip)
         {
             int match = 0;
             bool isFourInADiagonal = false;
@@ -286,9 +271,9 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             {
                 int columnPosition = c;
                 match = 0;
-                for (int row = m_BoardLength - 1; row < m_BoardLength && columnPosition < m_BoardLength && columnPosition >= 1; row--)
+                for (int row = m_BoardLength - 1; row < m_BoardLength && columnPosition < m_BoardWidth && columnPosition >= 1; row--)
                 {
-                    char currentValue = m_GameBoard[row, columnPosition];
+                    char currentValue = r_GameBoard[row, columnPosition];
                     if (currentValue == i_PlayerChip)
                         match++;
                     else match = 0;
@@ -304,6 +289,24 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             return isFourInADiagonal;
 
         }
+
+        public int GetFirstAvailableColumn()
+        {
+            int j=0;
+            int availableColumn = 0; 
+            for (int i = 0; i < m_BoardLength; i++)
+            {
+                for(j = 0; j < m_BoardWidth; j++)
+                {
+                    if(r_GameBoard[i,j] == ' ')
+                    {
+                        availableColumn = j;
+                        break;
+                    }
+                }
+            }
+            return availableColumn+ 1;
+        }
         private bool isFourInADiagonalTopLeftToBottomRightAfterMiddle(char i_PlayerChip)
         {
             int match = 0;
@@ -314,7 +317,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 match = 0;
                 for (int row = 0; row < m_BoardLength && columnPosition < m_BoardWidth; row++)
                 {
-                    char currentValue = m_GameBoard[row, columnPosition];
+                    char currentValue = r_GameBoard[row, columnPosition];
                     if (currentValue == i_PlayerChip)
                         match++;
                     else match = 0;
@@ -329,10 +332,10 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
             return isFourInADiagonal;
         }
-            public bool isFourInADiagonal(char i_PlayerChip)
+            public bool IsFourInADiagonal(char i_PlayerChip)
         {
             bool isFourInADiagonal = false;
-            isFourInADiagonal = (isFourInADiagonalTopLeftToBottomRightAfterMiddle(i_PlayerChip) || isFourInADiagonalbBottomLeftToTopRightAfterMiddle(i_PlayerChip)|| isFourInADiagonalbBottomLeftToTopRightIncludeMiddle(i_PlayerChip)|| isFourInADiagonalTopLeftToBottomRightIncludeMiddle(i_PlayerChip));
+            isFourInADiagonal = (isFourInADiagonalTopLeftToBottomRightAfterMiddle(i_PlayerChip) || isFourInADiagonalBottomLeftToTopRightIncludeMiddle(i_PlayerChip)|| isFourInADiagonalBottomLeftToTopRightIncludeMiddle(i_PlayerChip)|| isFourInADiagonalTopLeftToBottomRightIncludeMiddle(i_PlayerChip));
                 return isFourInADiagonal;
         }
         }
