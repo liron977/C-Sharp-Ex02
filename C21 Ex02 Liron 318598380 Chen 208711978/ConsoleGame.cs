@@ -18,11 +18,9 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             int playerType = 0;
 
             getBoardSize(ref boardWidth, ref boardLength);
-
             Ex02.ConsoleUtils.Screen.Clear();
             playerType = getPlayerType();
             FourInARow newGame = new FourInARow(boardWidth, boardLength, playerType);
-
             gameManage(newGame);
         }
 
@@ -31,11 +29,12 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             int playerChoice = 0;
             Player player;
             int currentChipRow = 0;
-            bool isContinueToAnotherRound = true;
 
-            while(isContinueToAnotherRound)
+            newGame.isContinueToAnotherRound = true;
+            while(newGame.isContinueToAnotherRound)
             {
                 newGame.initGame();
+                printBoard(newGame);
                 while(!newGame.isGameOver)
                 {
                     player = newGame.GetCurrentPlayer();
@@ -53,11 +52,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                     newGame.m_GameRound++;
                 }
 
-                isContinueToAnotherRound = isAnotherRound();
+                isAnotherRound(newGame);
             }
-          
-
-
         }
 
         private void playerQuitTheGame(FourInARow i_newGame, Player i_Player)
@@ -73,12 +69,12 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             ref int io_CurrentChipRow,
             ref int playerChoice)
         {
-            bool isChipNotAddedToColumn = true;
-            while(isChipNotAddedToColumn)
+            bool isFullColumnNumber = true;
+            while(isFullColumnNumber)
             {
                 if(i_Player.PlayerType == Player.ePlayerType.Person)
                 {
-                    playerChoice = getPlayerChoice( i_newGame);
+                    playerChoice = getPlayerChoice(i_newGame);
                     if(playerChoice == -1)
                     {
                         break;
@@ -89,17 +85,21 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                     playerChoice = i_newGame.GetComputerChoice();
                 }
 
-                isChipNotAddedToColumn = i_newGame.TheGameBoard.AddChips(
+                isFullColumnNumber = i_newGame.TheGameBoard.AddChips(
                     playerChoice,
                     i_Player.PlayerLetterType,
                     ref io_CurrentChipRow);
+                if(isFullColumnNumber)
+                {
+                    Console.WriteLine("The column is full please try again.");
+                }
             }
         }
 
         private void updateGameStatus(FourInARow i_newGame, int currentChipRow, int playerColumnChoice)
         {
             Ex02.ConsoleUtils.Screen.Clear();
-            i_newGame.TheGameBoard.PrintBoard();
+            printBoard(i_newGame);
             if(i_newGame.IsPlayerWon(currentChipRow, playerColumnChoice))
             {
                 printTheWinner(i_newGame);
@@ -112,7 +112,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         private void declareATie(FourInARow i_newGame)
         {
-            System.Console.WriteLine("Its a tie");
+            Console.WriteLine("Its a tie");
             printScore(i_newGame.GetCurrentPlayer(), i_newGame.GetPreviousPlayer());
             i_newGame.isGameOver = true;
         }
@@ -121,7 +121,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             i_newGame.GetCurrentPlayer().PlayerScore++;
             string theWinner = string.Format("Player {0} Won:", i_newGame.GetCurrentPlayer().NumberOfPlayer);
-            System.Console.WriteLine(theWinner);
+            Console.WriteLine(theWinner);
             printScore(i_newGame.GetCurrentPlayer(), i_newGame.GetPreviousPlayer());
             i_newGame.isGameOver = true;
         }
@@ -130,27 +130,28 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             bool isValidWidth = false;
             bool isValidLength = false;
+
             while(!isValidWidth)
             {
-                System.Console.WriteLine("Please enter the game board width,between 4-8");
-                io_BoardWidth = int.Parse(System.Console.ReadLine());
+                Console.WriteLine("Please enter the game board width,between 4-8");
+                io_BoardWidth = int.Parse(Console.ReadLine());
                 isValidWidth = isValidBoardSize(io_BoardWidth);
                 if(!isValidWidth)
                 {
                     Ex02.ConsoleUtils.Screen.Clear();
-                    System.Console.WriteLine("Invalid input!! ,Please enter the game board width,,between 4-8");
+                    Console.WriteLine("Invalid input!! ,Please enter the game board width,,between 4-8");
                 }
             }
 
             while(!isValidLength)
             {
-                System.Console.WriteLine("Please enter the game board length,,between 4-8");
-                io_BoardLength = int.Parse(System.Console.ReadLine());
+                Console.WriteLine("Please enter the game board length,,between 4-8");
+                io_BoardLength = int.Parse(Console.ReadLine());
                 isValidLength = isValidBoardSize(io_BoardLength);
                 if(!isValidLength)
                 {
                     Ex02.ConsoleUtils.Screen.Clear();
-                    System.Console.WriteLine("Invalid input!! ,Please enter the game board length,,between 4-8");
+                    Console.WriteLine("Invalid input!! ,Please enter the game board length,,between 4-8");
                 }
             }
         }
@@ -160,75 +161,109 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             bool isValidInput = false;
             string playerChoice = string.Empty;
             int playerTypeChoice = 0;
+
             while(!isValidInput)
             {
-                System.Console.WriteLine("Please choose if you want to play against computer press(1),if not press(2)");
-                playerChoice = System.Console.ReadLine();
+                Console.WriteLine("Please choose if you want to play against computer press(1),if not press(2)");
+                playerChoice = Console.ReadLine();
                 isValidInput = playerChoice == "1" || playerChoice == "2";
             }
 
             playerTypeChoice = int.Parse(playerChoice);
+
             return playerTypeChoice;
         }
 
-        private bool isAnotherRound()
+        private void isAnotherRound(FourInARow i_newGame)
         {
             int playerChoice = -1;
-            bool isAnotherRound=false;
             bool isValidInput = false;
 
-            while(!isValidInput)
+            i_newGame.isContinueToAnotherRound = false;
+            while (!isValidInput)
             {
-                System.Console.WriteLine("Would you like to play another game ? If so, press 1 .If not, press 0.");
-                playerChoice = int.Parse(System.Console.ReadLine());
+                Console.WriteLine("Would you like to play another game ? If so, press 1 .If not, press 0.");
+                playerChoice = int.Parse(Console.ReadLine());
                 isValidInput = playerChoice == 1 || playerChoice == 0;
                 Ex02.ConsoleUtils.Screen.Clear();
             }
 
-            isAnotherRound = playerChoice == 1;
-            return isAnotherRound;
+            i_newGame.isContinueToAnotherRound = playerChoice == 1;
         }
 
-        private  void printScore(Player io_Player1, Player io_Player2)
+        private void printScore(Player i_Player1, Player i_Player2)
         {
-            System.Console.WriteLine(
-                string.Format("Player {0} score: {1}", io_Player1.NumberOfPlayer, io_Player1.PlayerScore));
-            System.Console.WriteLine(
-                string.Format("Player {0} score: {1}", io_Player2.NumberOfPlayer, io_Player2.PlayerScore));
+            Console.WriteLine(
+                string.Format("Player {0} score: {1}", i_Player1.NumberOfPlayer, i_Player1.PlayerScore));
+            Console.WriteLine(
+                string.Format("Player {0} score: {1}", i_Player2.NumberOfPlayer, i_Player2.PlayerScore));
         }
 
-        private int getPlayerChoice( FourInARow newGame)
+        private int getPlayerChoice(FourInARow newGame)
         {
-            
             string playerChoice;
             bool isValidPlayerChoice = false;
-            int PlayerColumnChoice = 0;
-            System.Console.WriteLine(
+            int playerColumnChoice = 0;
+
+            Console.WriteLine(
                 string.Format("Player {0} please choose column number:", newGame.GetCurrentPlayer().NumberOfPlayer));
             while(!isValidPlayerChoice)
             {
-                playerChoice = System.Console.ReadLine();
+                playerChoice = Console.ReadLine();
                 if(playerChoice == "Q")
                 {
                     return -1;
                 }
 
                 isValidPlayerChoice = newGame.IsPlayerChoiceIsNumber(playerChoice)
-                                      && newGame.IsPlayerChoiceColumnInRange(playerChoice, ref PlayerColumnChoice);
+                                      && newGame.IsPlayerChoiceColumnInRange(playerChoice, ref playerColumnChoice);
                 if(!isValidPlayerChoice)
                 {
-                    System.Console.WriteLine("Invalid choice");
+                    Console.WriteLine("Invalid choice");
                 }
             }
 
-            return PlayerColumnChoice;
+            return playerColumnChoice;
         }
 
         private bool isValidBoardSize(int i_input)
         {
-            bool isValidInput = true;
-            isValidInput = i_input >= 4 && i_input <= 8;
+            bool isValidInput = i_input >= 4 && i_input <= 8;
+
             return isValidInput;
+        }
+
+        private void printBoard(FourInARow i_newGame)
+        {
+            StringBuilder theGameBoard = new StringBuilder();
+
+            theGameBoard.Append("  ");
+            for(int i = 0; i < i_newGame.TheGameBoard.BoardWidth; i++)
+            {
+                theGameBoard.AppendFormat("{0}   ", i + 1);
+            }
+
+            theGameBoard.AppendFormat("{0}", Environment.NewLine);
+
+            for(int i = 0; i < i_newGame.TheGameBoard.BoardLength; i++)
+            {
+                for(int j = 0; j < i_newGame.TheGameBoard.BoardWidth; j++)
+                {
+                    theGameBoard.AppendFormat(@"| {0} ", i_newGame.TheGameBoard.TheGameBoard[i, j]);
+                }
+
+                theGameBoard.Append("|");
+                theGameBoard.AppendFormat("{0}", Environment.NewLine);
+                for(int k = 0; k < i_newGame.TheGameBoard.BoardWidth; k++)
+                {
+                    theGameBoard.Append("====");
+                }
+
+                theGameBoard.Append("==");
+                theGameBoard.AppendFormat("{0}", Environment.NewLine);
+            }
+
+            Console.WriteLine(theGameBoard);
         }
     }
 }
