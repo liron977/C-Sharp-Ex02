@@ -186,7 +186,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
             while (!isValidInput)
             {
-                Console.WriteLine();
+                Console.WriteLine(messageToTheUser);
                 messageToTheUser="Invalid input! Would you like to play another game ? If so, press 1 .If not, press 0.";
                 playerChoiceAnotherRound = Console.ReadLine();
                 if(playerChoiceAnotherRound != string.Empty)
