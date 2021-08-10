@@ -10,7 +10,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
     public class ConsoleGame
     {
         private readonly int playerDecidedToQuit = -1;
-
+        private readonly string playerPausedThegameCapitalsymbol ="Q";
+        private readonly string playerPausedThegameLowersymbol = "q";
         public void StartGame()
         {
             int boardLength = 0;
@@ -227,9 +228,9 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             while(!isValidPlayerChoice)
             {
                 playerChoice = Console.ReadLine();
-                if(playerChoice == "Q")
+                if((playerChoice == playerPausedThegameCapitalsymbol) || (playerChoice ==playerPausedThegameLowersymbol))
                 {
-                    return -1;
+                    return playerDecidedToQuit;
                 }
 
                 isValidPlayerChoice =IsPlayerChoiceIsNumber(playerChoice)
