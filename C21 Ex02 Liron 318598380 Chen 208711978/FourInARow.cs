@@ -53,7 +53,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
         }
 
-        public void initGame()
+        public void InitGame()
         {
             isGameOver = false;
             m_IsContinueToAnotherRound = true;
@@ -87,16 +87,14 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         public bool IsPlayerWon(int i_CurrentChipRow, int i_PlayerColumnChoice)
         {
-            bool isPlayerWon = false;
-            isPlayerWon =
-                r_TheGameBoard.IsFourInARow(
-                    GetCurrentPlayer().PlayerLetterType,
-                    i_CurrentChipRow,
-                    i_PlayerColumnChoice - 1) || r_TheGameBoard.IsFourInADiagonal(GetCurrentPlayer().PlayerLetterType)
-                                              || r_TheGameBoard.IsFourInACol(
-                                                  GetCurrentPlayer().PlayerLetterType,
-                                                  i_CurrentChipRow,
-                                                  i_PlayerColumnChoice - 1);
+            bool isPlayerWon = isPlayerWon = r_TheGameBoard.IsFourInARow(
+                                                        GetCurrentPlayer().PlayerLetterType,
+                                                        i_CurrentChipRow,
+                                                        i_PlayerColumnChoice - 1) || r_TheGameBoard.IsFourInADiagonal(GetCurrentPlayer().PlayerLetterType)
+                                                    || r_TheGameBoard.IsFourInACol(
+                                                        GetCurrentPlayer().PlayerLetterType,
+                                                        i_CurrentChipRow,
+                                                        i_PlayerColumnChoice - 1);
             return isPlayerWon;
         }
 

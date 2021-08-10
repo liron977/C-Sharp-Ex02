@@ -16,8 +16,9 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             int boardLength = 0;
             int boardWidth = 0;
             int playerType = 0;
-
-            getBoardSize(ref boardWidth, ref boardLength);
+            
+            getBoardSize(ref boardLength,"length");
+            getBoardSize(ref boardWidth, "width");
             Ex02.ConsoleUtils.Screen.Clear();
             playerType = getPlayerType();
             FourInARow newGame = new FourInARow(boardWidth, boardLength, playerType);
@@ -33,7 +34,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             i_Game.isContinueToAnotherRound = true;
             while(i_Game.isContinueToAnotherRound)
             {
-                i_Game.initGame();
+                i_Game.InitGame();
                 printBoard(i_Game);
                 while(!i_Game.isGameOver)
                 {
@@ -126,58 +127,45 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             i_Game.isGameOver = true;
         }
 
-        private void getBoardSize(ref int io_BoardWidth, ref int io_BoardLength)
+        private void getBoardSize(ref int io_BoardSize,string i_TypeOfSize)
         {
-            bool isValidWidth = false;
-            bool isValidLength = false;
-            string boardWidthInput = string.Empty;
-            string boardLengthInput = string.Empty;
+            bool isValidInput = false;
+            string boardInput = string.Empty;
+            string messageToTheUser = string.Empty;
 
-            while (!isValidWidth)
+            messageToTheUser = String.Format($@"Please enter the game board {i_TypeOfSize},between 4-8");
+            while (!isValidInput)
             {
-                Console.WriteLine("Please enter the game board width,between 4-8");
-                boardWidthInput = Console.ReadLine();
-                if(boardWidthInput != string.Empty)
+                Ex02.ConsoleUtils.Screen.Clear();
+                Console.WriteLine(messageToTheUser);
+                boardInput = Console.ReadLine();
+                if(boardInput != string.Empty)
                 {
-                    io_BoardWidth = int.Parse(boardWidthInput);
-                    isValidWidth = isValidBoardSize(io_BoardWidth);
+                    io_BoardSize = int.Parse(boardInput);
+                    isValidInput = isValidBoardSize(io_BoardSize);
                 }
-
-                if(!isValidWidth)
-                {
-                    Ex02.ConsoleUtils.Screen.Clear();
-                    Console.WriteLine("Invalid input!! ,Please enter the game board width,,between 4-8");
-                }
+                messageToTheUser=String.Format($@"Invalid input!! ,Please enter the game board {i_TypeOfSize},between 4-8");
+                
+                
             }
 
-            while(!isValidLength)
-            {
-                Console.WriteLine("Please enter the game board length,,between 4-8");
-                boardLengthInput = Console.ReadLine();
-                if(boardLengthInput != string.Empty)
-                {
-                    io_BoardLength = int.Parse(boardLengthInput);
-                    isValidLength = isValidBoardSize(io_BoardLength);
-                }
-
-                if(!isValidLength)
-                {
-                    Ex02.ConsoleUtils.Screen.Clear();
-                    Console.WriteLine("Invalid input!! ,Please enter the game board length,,between 4-8");
-                }
-            }
-        }
+        
+    }
 
         private static int getPlayerType()
         {
             bool isValidInput = false;
             string playerChoice = string.Empty;
             int playerTypeChoice = 0;
+            string messageToTheUser= string.Empty;
 
-            while(!isValidInput)
+            messageToTheUser = String.Format($@"Please choose if you want to play against computer press(1),if not press(2)");
+            while (!isValidInput)
             {
-                Console.WriteLine("Please choose if you want to play against computer press(1),if not press(2)");
-                playerChoice = Console.ReadLine();
+                Ex02.ConsoleUtils.Screen.Clear();
+                Console.WriteLine(messageToTheUser);
+                messageToTheUser="Invalid input! Please choose if you want to play against computer press(1),if not press(2)";
+                 playerChoice = Console.ReadLine();
                 isValidInput = playerChoice == "1" || playerChoice == "2";
             }
 
@@ -190,16 +178,20 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             int playerChoice = -1;
             bool isValidInput = false;
-            string playerChoiseAnotherRound;
+            string playerChoiceAnotherRound=string.Empty;
+            string messageToTheUser = string.Empty;
 
             i_Game.isContinueToAnotherRound = false;
+            messageToTheUser = "Would you like to play another game ? If so, press 1 .If not, press 0.";
+
             while (!isValidInput)
             {
-                Console.WriteLine("Would you like to play another game ? If so, press 1 .If not, press 0.");
-                playerChoiseAnotherRound = Console.ReadLine();
-                if(playerChoiseAnotherRound != string.Empty)
+                Console.WriteLine();
+                messageToTheUser="Invalid input! Would you like to play another game ? If so, press 1 .If not, press 0.";
+                playerChoiceAnotherRound = Console.ReadLine();
+                if(playerChoiceAnotherRound != string.Empty)
                 {
-                    playerChoice = int.Parse(playerChoiseAnotherRound);
+                    playerChoice = int.Parse(playerChoiceAnotherRound);
                     isValidInput = playerChoice == 1 || playerChoice == 0;
                 }
 
@@ -219,7 +211,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         private int getPlayerChoice(FourInARow i_Game)
         {
-            string playerChoice;
+            string playerChoice=string.Empty;
             bool isValidPlayerChoice = false;
             int playerColumnChoice = 0;
 
