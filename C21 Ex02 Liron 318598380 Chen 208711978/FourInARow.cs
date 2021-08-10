@@ -8,8 +8,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         private readonly Player r_Player2;
         private int m_GameRoundCounter;
         private readonly Board r_TheGameBoard;
-        private bool m_isGameOver;
-        private bool m_isContinueToAnotherRound;
+        private bool m_IsGameOver;
+        private bool m_IsContinueToAnotherRound;
 
         public FourInARow(int i_BoardWidth, int i_BoardLength, int playerType)
         {
@@ -18,7 +18,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             r_Player1 = new Player(2, 1);
             r_Player2 = new Player(playerType, 2);
             m_GameRoundCounter = 0;
-            m_isGameOver = false;
+            m_IsGameOver = false;
         }
 
         public Board TheGameBoard
@@ -32,31 +32,31 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             get
             {
-                return m_isGameOver;
+                return m_IsGameOver;
             }
 
             set
             {
-                m_isGameOver = value;
+                m_IsGameOver = value;
             }
         }
         public bool isContinueToAnotherRound
         {
             get
             {
-                return m_isContinueToAnotherRound;
+                return m_IsContinueToAnotherRound;
             }
 
             set
             {
-                m_isContinueToAnotherRound = value;
+                m_IsContinueToAnotherRound = value;
             }
         }
 
         public void initGame()
         {
             isGameOver = false;
-            m_isContinueToAnotherRound = true;
+            m_IsContinueToAnotherRound = true;
             m_GameRoundCounter = 0;
             r_TheGameBoard.InitBoard(r_TheGameBoard.BoardLength, r_TheGameBoard.BoardWidth);
             Ex02.ConsoleUtils.Screen.Clear();
