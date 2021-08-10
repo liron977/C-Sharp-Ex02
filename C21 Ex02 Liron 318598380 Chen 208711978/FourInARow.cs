@@ -100,35 +100,18 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         public int GetComputerChoice()
         {
-            System.Console.WriteLine("The computer turn");
             Thread.Sleep(500);
             int computerChoice = r_TheGameBoard.GetFirstAvailableColumn();
             return computerChoice;
         }
-
-        public bool IsPlayerChoiceIsNumber(string i_PlayerChoice)
-        {
-            bool isPlayerChoiceNumber = true;
-           
-            for(int i = 0; i < i_PlayerChoice.Length; i++)
-            {
-                isPlayerChoiceNumber = (char.IsDigit(i_PlayerChoice[i]));
-                if(!isPlayerChoiceNumber)
-                {
-                    break;
-                }
-            }
-
-            return isPlayerChoiceNumber;
-        }
-
         public bool IsPlayerChoiceColumnInRange(string i_PlayerChoice, ref int io_PlayerColumnChoice)
         {
-            bool isValidPlayerChoiceColumn = true;
-
-            io_PlayerColumnChoice = int.Parse(i_PlayerChoice);
-            isValidPlayerChoiceColumn = io_PlayerColumnChoice <= r_TheGameBoard.BoardWidth;
-
+            bool isValidPlayerChoiceColumn = false;
+            if (i_PlayerChoice != string.Empty)
+            {
+                io_PlayerColumnChoice = int.Parse(i_PlayerChoice);
+                isValidPlayerChoiceColumn = io_PlayerColumnChoice <= r_TheGameBoard.BoardWidth;
+            }
             return isValidPlayerChoiceColumn;
         }
     }

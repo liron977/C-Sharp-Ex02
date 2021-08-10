@@ -16,13 +16,14 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             int boardLength = 0;
             int boardWidth = 0;
             int playerType = 0;
-            
+
             getBoardSize(ref boardLength,"length");
             getBoardSize(ref boardWidth, "width");
             Ex02.ConsoleUtils.Screen.Clear();
             playerType = getPlayerType();
             FourInARow newGame = new FourInARow(boardWidth, boardLength, playerType);
             gameManage(newGame);
+
         }
 
         private void gameManage(FourInARow i_Game)
@@ -83,6 +84,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 }
                 else
                 {
+                    System.Console.WriteLine("The computer turn");
                     playerChoice = i_Game.GetComputerChoice();
                 }
 
@@ -141,8 +143,13 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 boardInput = Console.ReadLine();
                 if(boardInput != string.Empty)
                 {
-                    io_BoardSize = int.Parse(boardInput);
-                    isValidInput = isValidBoardSize(io_BoardSize);
+                    isValidInput = IsPlayerChoiceIsNumber(boardInput);
+                    if (isValidInput)
+                    {
+                       io_BoardSize = int.Parse(boardInput);
+                        isValidInput = isValidBoardSize(io_BoardSize);
+                    }
+                   
                 }
                 messageToTheUser=String.Format($@"Invalid input!! ,Please enter the game board {i_TypeOfSize},between 4-8");
                 
@@ -225,7 +232,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                     return -1;
                 }
 
-                isValidPlayerChoice = i_Game.IsPlayerChoiceIsNumber(playerChoice)
+                isValidPlayerChoice =IsPlayerChoiceIsNumber(playerChoice)
                                       && i_Game.IsPlayerChoiceColumnInRange(playerChoice, ref playerColumnChoice);
                 if(!isValidPlayerChoice)
                 {
@@ -234,6 +241,27 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
             }
 
             return playerColumnChoice;
+        }
+        public bool IsPlayerChoiceIsNumber(string i_PlayerChoice)
+        {
+            bool isPlayerChoiceNumber = true;
+            if (i_PlayerChoice.Length > 0)
+            {
+                if (i_PlayerChoice[0] == '0')
+                {
+                    isPlayerChoiceNumber = false;
+                }
+            }
+            for (int i = 0; i < i_PlayerChoice.Length && isPlayerChoiceNumber; i++)
+            {
+                isPlayerChoiceNumber = (char.IsDigit(i_PlayerChoice[i]));
+                if (!isPlayerChoiceNumber)
+                {
+                    break;
+                }
+            }
+
+            return isPlayerChoiceNumber;
         }
 
         private bool isValidBoardSize(int i_InputBoardSize)
