@@ -18,7 +18,6 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         {
             m_PlayerType = (ePlayerType)i_PlayerType;
             m_ScoreOfPlayer = 0;
-
             m_LetterType = i_NumberOfPlayer == 1 ? 'X' : 'O';
             m_NumberOfPlayer = i_NumberOfPlayer;
         }

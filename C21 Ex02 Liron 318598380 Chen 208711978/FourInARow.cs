@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace C21_Ex02_Liron_318598380_Chen_208711978
 {
@@ -11,12 +12,11 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
         private bool m_IsGameOver;
         private bool m_IsContinueToAnotherRound;
 
-        public FourInARow(int i_BoardWidth, int i_BoardLength, int playerType)
+        public FourInARow(int i_BoardWidth, int i_BoardLength, int i_PlayerType)
         {
             r_TheGameBoard = new Board(i_BoardWidth, i_BoardLength);
-
             r_Player1 = new Player(2, 1);
-            r_Player2 = new Player(playerType, 2);
+            r_Player2 = new Player(i_PlayerType, 2);
             m_GameRoundCounter = 0;
             m_IsGameOver = false;
         }
@@ -28,7 +28,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 return r_TheGameBoard;
             }
         }
-        public bool isGameOver
+
+        public bool IsGameOver
         {
             get
             {
@@ -40,7 +41,8 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
                 m_IsGameOver = value;
             }
         }
-        public bool isContinueToAnotherRound
+
+        public bool IsContinueToAnotherRound
         {
             get
             {
@@ -55,7 +57,7 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         public void InitGame()
         {
-            isGameOver = false;
+            IsGameOver = false;
             m_IsContinueToAnotherRound = true;
             m_GameRoundCounter = 0;
             r_TheGameBoard.InitBoard(r_TheGameBoard.BoardLength, r_TheGameBoard.BoardWidth);
@@ -87,31 +89,39 @@ namespace C21_Ex02_Liron_318598380_Chen_208711978
 
         public bool IsPlayerWon(int i_CurrentChipRow, int i_PlayerColumnChoice)
         {
-            bool isPlayerWon = isPlayerWon = r_TheGameBoard.IsFourInARow(
-                                                        GetCurrentPlayer().PlayerLetterType,
-                                                        i_CurrentChipRow,
-                                                        i_PlayerColumnChoice - 1) || r_TheGameBoard.IsFourInADiagonal(GetCurrentPlayer().PlayerLetterType)
-                                                    || r_TheGameBoard.IsFourInACol(
-                                                        GetCurrentPlayer().PlayerLetterType,
-                                                        i_CurrentChipRow,
-                                                        i_PlayerColumnChoice - 1);
+            bool isPlayerWon = isPlayerWon =
+                                   r_TheGameBoard.IsFourInARow(
+                                       GetCurrentPlayer().PlayerLetterType,
+                                       i_CurrentChipRow,
+                                       i_PlayerColumnChoice - 1)
+                                   || r_TheGameBoard.IsFourInADiagonal(GetCurrentPlayer().PlayerLetterType)
+                                   || r_TheGameBoard.IsFourInACol(
+                                       GetCurrentPlayer().PlayerLetterType,
+                                       i_CurrentChipRow,
+                                       i_PlayerColumnChoice - 1);
+
             return isPlayerWon;
         }
 
         public int GetComputerChoice()
         {
+            int computerChoice = new Random().Next(1, r_TheGameBoard.BoardWidth);
+
             Thread.Sleep(500);
-            int computerChoice = r_TheGameBoard.GetFirstAvailableColumn();
+
             return computerChoice;
         }
+
         public bool IsPlayerChoiceColumnInRange(string i_PlayerChoice, ref int io_PlayerColumnChoice)
         {
             bool isValidPlayerChoiceColumn = false;
-            if (i_PlayerChoice != string.Empty)
+
+            if(i_PlayerChoice != string.Empty)
             {
                 io_PlayerColumnChoice = int.Parse(i_PlayerChoice);
                 isValidPlayerChoiceColumn = io_PlayerColumnChoice <= r_TheGameBoard.BoardWidth;
             }
+
             return isValidPlayerChoiceColumn;
         }
     }
